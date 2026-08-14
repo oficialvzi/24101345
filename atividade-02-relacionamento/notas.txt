@@ -1,0 +1,6 @@
+ID_ALUNO;DISCIPLINA;NOTA
+1;Banco de Dados;9.5
+1;Programação;8.0
+2;Banco de Dados;7.5
+2;Programação;9.0
+3;Banco de Dados;10.0
