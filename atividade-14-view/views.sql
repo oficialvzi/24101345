@@ -1,5 +1,8 @@
 USE aeroporto;
 
+-- vw_passagens_detalhadas
+-- Passagens com dados do passageiro, do voo e da aeronave.
+-- View com JOIN: somente leitura.
 CREATE OR REPLACE VIEW vw_passagens_detalhadas AS
 SELECT p.id_passagem,
        p.PASSAGEIRO_cpf AS cpf,
@@ -21,6 +24,10 @@ JOIN PASSAGEIRO pa ON pa.cpf = p.PASSAGEIRO_cpf
 JOIN VOO        v  ON v.numero_voo = p.VOO_numero_voo
 JOIN AERONAVE   a  ON a.numero_aeronave = v.AERONAVE_numero_aeronave;
 
+-- vw_ocupacao_receita_voo
+-- Relatório por voo: passagens vendidas, check-ins, divisão por classe e receita.
+-- LEFT JOIN mantém voos sem passagens vendidas (receita 0).
+-- View com agregação: somente leitura.
 CREATE OR REPLACE VIEW vw_ocupacao_receita_voo AS
 SELECT v.numero_voo,
        v.origem,
@@ -36,6 +43,10 @@ FROM VOO v
 LEFT JOIN PASSAGEM p ON p.VOO_numero_voo = v.numero_voo
 GROUP BY v.numero_voo, v.origem, v.destino, v.horario_partida;
 
+-- vw_checkin_pendente
+-- Passagens com check-in pendente.
+-- View atualizável (tabela única, contém a PK).
+-- WITH CHECK OPTION impede gravar registros que saiam do filtro.
 CREATE OR REPLACE VIEW vw_checkin_pendente AS
 SELECT id_passagem, PASSAGEIRO_cpf, VOO_numero_voo, numero_assento, classe, status_checkin
 FROM PASSAGEM

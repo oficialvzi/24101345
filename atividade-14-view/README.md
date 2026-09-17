@@ -8,7 +8,7 @@
 Nome da view: vw_passagens_detalhadas
 Tabelas de origem: PASSAGEM, PASSAGEIRO, VOO, AERONAVE
 Tipo: JOIN
-É atualizável? Parcialmente. Permite UPDATE em colunas de uma tabela base por vez; não permite INSERT/DELETE por ter JOIN.
+É atualizável? Não. Possui JOIN entre várias tabelas; uso somente leitura.
 Problema que ela resolve: evita repetir o JOIN de 4 tabelas para exibir passagens com passageiro, voo e aeronave.
 Esboço do SELECT:
 SELECT p.id_passagem, p.PASSAGEIRO_cpf AS cpf, pa.nome_completo,
@@ -48,7 +48,7 @@ GROUP BY v.numero_voo, v.origem, v.destino, v.horario_partida;
 Nome da view: vw_checkin_pendente
 Tabelas de origem: PASSAGEM
 Tipo: simples
-É atualizável? Sim. Tabela única, sem agregação; usa WITH CHECK OPTION para impedir gravações fora do filtro.
+É atualizável? Sim. Tabela única, sem agregação e contém a chave primária; usa WITH CHECK OPTION para impedir gravações fora do filtro.
 Problema que ela resolve: lista apenas passagens com check-in pendente.
 Esboço do SELECT:
 SELECT id_passagem, PASSAGEIRO_cpf, VOO_numero_voo, numero_assento, classe, status_checkin
@@ -65,7 +65,5 @@ Base de teste: 60 aeronaves, 100.000 passageiros, 24.000 voos e 400.000 passagen
 |---|---|---|---|---|---|---|---|
 | `SELECT * FROM VOO WHERE origem='BSB' AND destino='SSA' ORDER BY horario_partida` — `idx_voo_rota_partida (origem, destino, horario_partida)` | ALL | 23.953 | 8,50 | ref | 3.000 | 5,40 | Ajudou. Linhas examinadas caíram 9x e o índice composto eliminou o filesort. Manter. |
 | `SELECT COUNT(*), SUM(valor_pago) FROM PASSAGEM WHERE data_reserva >= '2026-03-01' AND data_reserva < '2026-03-08'` — `idx_passagem_data_reserva` | ALL | 398.142 | 69,03 | range | 7.647 | 11,02 | Ajudou. 6x mais rápida em coluna seletiva consultada por faixa. Manter, apesar do custo em INSERT. |
-| `SELECT * FROM PASSAGEM WHERE status_checkin='pendente'` — `idx_passagem_status` | ALL | 398.142 | 155,79 | ref | 118.612 | 107,84 | Ganho parcial. Coluna de baixa seletividade (15% das linhas) e custo de escrita alto em PASSAGEM. Não manter. |
-| `SELECT * FROM AERONAVE WHERE fabricante='Embraer'` — `idx_aeronave_fabricante` | ALL | 60 | 0,30 | ref | 20 | 0,28 | Sem ganho. Tabela pequena; diferença dentro da variação normal. Não manter. |
-
-
+| `SELECT * FROM PASSAGEM WHERE status_checkin='pendente'` — `idx_passagem_status` | ALL | 398.142 | 155,79 | ref | 118.612 | 107,84 | Ganho parcial. Coluna de baixa seletividade (15% das linhas) e custo de escrita alto em PASSAGEM. Índice removido. |
+| `SELECT * FROM AERONAVE WHERE fabricante='Embraer'` — `idx_aeronave_fabricante` | ALL | 60 | 0,30 | ref | 20 | 0,28 | Sem ganho. Tabela pequena; diferença dentro da variação normal. Índice removido. |
