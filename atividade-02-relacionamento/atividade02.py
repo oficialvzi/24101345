@@ -32,7 +32,7 @@ def listar_alunos():
     except FileNotFoundError:
         print("Nenhum aluno cadastrado.")
 
-# BUSCA
+# 3
 def buscar_aluno_por_nome(nome_busca):
     try:
         with open(ARQUIVO_ALUNOS, "r", encoding="utf-8") as arquivo:
@@ -42,14 +42,17 @@ def buscar_aluno_por_nome(nome_busca):
 
                 id_aluno = dados[0]
                 nome = dados[1]
+                telefone = dados[2]
+                email = dados[3]
 
                 if nome.lower() == nome_busca.lower():
-                    return id_aluno, nome
+                    print(f"{id_aluno}, {nome}, {telefone}, {email}")
+                    return id_aluno, nome;
     except FileNotFoundError:
         return None
     return None
 
-# 3
+# 4
 def cadastrar_nota():
     print("\n--- CADASTRAR NOTA ---")
 
@@ -72,7 +75,7 @@ def cadastrar_nota():
         )
     print("Nota cadastrada com sucesso!")
 
-# 4
+# 5
 def consultar_nota():
     print("\n--- CONSULTAR NOTA ---")
 
@@ -101,7 +104,9 @@ def consultar_nota():
                 nota = dados[2]
 
                 if id_nota == id_aluno and disciplina.lower() == disciplina_busca.lower():
-                    print(f"Nota encontrada: {nota}")
+                    print(f"Aluno: {aluno}")
+                    print(f"Disciplina: {disciplina}")
+                    print(f"Nota: {nota}")
                     nota_encontrada = True
                     break
 
@@ -110,7 +115,7 @@ def consultar_nota():
     except FileNotFoundError:
         print("Nenhuma nota cadastrada.")       
 
-# 5
+# 6
 def listar_notas_aluno():
     print("\n--- LISTAR NOTAS DO ALUNO ---")
 
@@ -149,7 +154,7 @@ def listar_notas_aluno():
     except FileNotFoundError:
         print("Nenhuma nota cadastrada.")
 
-# 6
+# 7
 def calcular_media():
     print("\n--- CALCULAR MÉDIA ---")
     
@@ -197,10 +202,11 @@ def menu():
         print("==============================")
         print("1 - Cadastrar aluno")
         print("2 - Listar alunos")
-        print("3 - Cadastrar nota")
-        print("4 - Consultar nota")
-        print("5 - Listar notas de um aluno")
-        print("6 - Calcular média")
+        print("3 - Buscar aluno")
+        print("4 - Cadastrar nota")
+        print("5 - Consultar nota")
+        print("6 - Listar notas de um aluno")
+        print("7 - Calcular média")
         print("0 - Sair")
 
         opcao = input("\nEscolha uma opção: ")
@@ -210,12 +216,15 @@ def menu():
         elif opcao == "2":
             listar_alunos()
         elif opcao == "3":
-            cadastrar_nota()
+            nome_buscar = input("\nDigite o nome do Aluno: ")
+            buscar_aluno_por_nome(nome_buscar)
         elif opcao == "4":
-            consultar_nota()
+            cadastrar_nota()
         elif opcao == "5":
-            listar_notas_aluno()
+            consultar_nota()
         elif opcao == "6":
+            listar_notas_aluno()
+        elif opcao == "7":
             calcular_media()
         elif opcao == "0":
             print("Sistema encerrado.")
