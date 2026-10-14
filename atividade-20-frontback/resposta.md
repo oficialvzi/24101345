@@ -83,8 +83,6 @@ O JSON passou a trazer o campo `status` pronto:
 
 No JavaScript, eu apaguei o cálculo e ele passou só a exibir o que recebe (`colunaStatus.textContent = aluno.status`). O frontend não sabe mais qual é a nota de corte.
 
-Para confirmar que a decisão estava mesmo no backend, troquei temporariamente o `7` por `6` no `alunos.php`. O Bruno Lima (nota 6,0) passou a aparecer como **Aprovado** sem que eu mexesse em nenhuma linha do JavaScript. Mudar a regra exigiu alterar **um único arquivo**.
-
 Detalhe observado: no print, notas inteiras aparecem no JSON como `6`, `7` e `9` (sem o `.0`). Como o valor é um número e não um texto, o JavaScript formata com `toFixed(1)` e a página mostra `6,0`, `7,0` e `9,0` corretamente.
 
 ## Onde a regra de negócio deve ficar?
