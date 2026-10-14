@@ -5,9 +5,6 @@ fetch('api/alunos.php')
     .then(response => response.json())
     .then(alunos => {
         alunos.forEach(aluno => {
-            // Versão 1: a regra de negócio está no JavaScript
-            const status = aluno.nota >= 7 ? 'Aprovado' : 'Reprovado';
-
             const linha = document.createElement('tr');
 
             const colunaNome = document.createElement('td');
@@ -17,7 +14,7 @@ fetch('api/alunos.php')
             colunaNota.textContent = aluno.nota.toFixed(1).replace('.', ',');
 
             const colunaStatus = document.createElement('td');
-            colunaStatus.textContent = status;
+            colunaStatus.textContent = aluno.status;
 
             linha.appendChild(colunaNome);
             linha.appendChild(colunaNota);

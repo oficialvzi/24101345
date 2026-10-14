@@ -10,6 +10,9 @@ $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($alunos as $i => $aluno) {
     $alunos[$i]['id']   = (int) $aluno['id'];
     $alunos[$i]['nota'] = (float) $aluno['nota'];
+
+    // Versão 2: a regra de negócio está no backend
+    $alunos[$i]['status'] = $alunos[$i]['nota'] >= 7 ? 'Aprovado' : 'Reprovado';
 }
 
 header('Content-Type: application/json; charset=utf-8');
