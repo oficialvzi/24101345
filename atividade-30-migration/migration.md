@@ -135,6 +135,3 @@ Tabela `schema_migrations` depois de aplicar tudo:
 3. **Imutabilidade.** A `002` já foi aplicada e registrada em `schema_migrations` nos outros ambientes. Editar o arquivo não a reexecuta, então cada ambiente ficaria com um tamanho diferente. O certo é criar uma nova migration, por exemplo `005_aumenta_portao_embarque.sql`, com `ALTER TABLE VOO MODIFY COLUMN portao_embarque VARCHAR(10) NULL;` no `up` e a volta para `VARCHAR(5)` no `down`.
 4. **Backup.** O passo 4 (contrair): o `DROP COLUMN` apaga os dados da coluna, e o `down` recria a coluna vazia. Sem backup, ou sem a coluna nova já preenchida, não há como recuperar.
 
-## 6. Arquivos entregues
-
-`migrate.php`, `migrations/` (001 a 004), `backfill_origem.php`, `codigo/Voo.php` (model alterado no passo 3), capturas em `imagens-evidencias/` e este relatório, que também traz as respostas das perguntas 1 e 2 e da Parte 4.
